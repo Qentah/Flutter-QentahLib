@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:separated_row/separated_row.dart';
@@ -43,16 +43,20 @@ class _FirstPageState extends State<FirstPage> with TickerProviderStateMixin {
           controller: tabController,
           children: [
             SingleChildScrollView(
-              child: ResponsiveStretchRow(elemMinWidth: 200, children: [
-                for (var i = 0; i < 10; ++i)
-                  Container(
-                    height: 100,
-                    width: 100,
-                    color:
-                        Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(1.0),
-                  ),
-              ]),
+              child: ResponsiveStretchRow(
+                children: [
+                  RSRElement(min_width: 100, child: newMethod(50)),
+                  RSRElement(min_width: 200, child: newMethod(200)),
+                  RSRElement(min_width: 300, child: newMethod(400)),
+                  RSRElement(min_width: 200, child: newMethod(100)),
+                  RSRElement(min_width: 200, child: newMethod(100)),
+                  RSRElement(min_width: 500, child: newMethod(100)),
+                  RSRElement(min_width: 500, child: newMethod(100)),
+                  RSRElement(min_width: 500, child: newMethod(300)),
+                  RSRElement(min_width: 500, child: newMethod(500)),
+                  RSRElement(min_width: 500, child: newMethod(400)),
+                ],
+              ),
             ),
             Icon(Icons.directions_transit),
             Icon(Icons.directions_bike),
@@ -61,38 +65,97 @@ class _FirstPageState extends State<FirstPage> with TickerProviderStateMixin {
       ),
     );
   }
+
+  Container newMethod(double height) => Container(
+        color:
+            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+        height: height,
+      );
+}
+
+class RSRElement extends StatelessWidget {
+  const RSRElement({Key? key, required this.min_width, required this.child})
+      : super(key: key);
+
+  final Widget child;
+  final double min_width;
+
+  @override
+  Widget build(BuildContext context) => Center(
+        child: child,
+      );
 }
 
 class ResponsiveStretchRow extends StatelessWidget {
-  const ResponsiveStretchRow(
-      {Key? key, required this.elemMinWidth, required this.children})
-      : super(key: key);
+  ResponsiveStretchRow({Key? key, required this.children}) : super(key: key);
 
-  final double elemMinWidth;
-  final List<Widget> children;
+  final List<RSRElement> children;
+  final List<double> min_sizes = [
+    300,
+    100,
+    200,
+    300,
+    500,
+    300,
+    100,
+    100,
+    300,
+    300,
+    100,
+    200,
+    300,
+    500,
+    300,
+    100,
+    100,
+    300,
+    300,
+    100,
+    200,
+    300,
+    500,
+    300,
+    100,
+    100,
+    300,
+    300,
+    100,
+    200,
+    300,
+    500,
+    300,
+    100,
+    100,
+    300
+  ];
 
   @override
   Widget build(BuildContext context) =>
       LayoutBuilder(builder: (context, constraints) {
         List<List<Widget>> rows = [];
 
-        final m_elem = constraints.maxWidth ~/ elemMinWidth;
-
+        var size = .0;
         List<Widget> row = [];
         for (var i = 0; i < children.length; i++) {
-          if (i != 0 && i % m_elem == 0) {
+          if (children[i].min_width + size > constraints.maxWidth) {
             rows.add(List.from(row));
             row.clear();
+            size = 0;
           }
-          row.add(children[i]);
+          size += min_sizes[i];
+          row.add(Expanded(
+              flex: children[i].min_width.toInt(), child: children[i]));
         }
         rows.add(List.from(row));
 
         return Column(
           children: [
             for (var row in rows)
-              Row(
-                children: [for (var elem in row) Expanded(child: elem)],
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: row,
+                ),
               )
           ],
         );
