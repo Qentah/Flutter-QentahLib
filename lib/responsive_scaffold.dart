@@ -65,7 +65,13 @@ class ResponsiveDrawerScaffold extends StatelessWidget {
       appBar: appBar,
       body: Scaffold(
         key: key,
-        drawer: isCompactMode ? drawer : null,
+        drawer: isCompactMode
+            ? Container(
+                color: Colors.white,
+                width: drawerWidth,
+                child: drawer,
+              )
+            : null,
         body: Row(
           children: [
             SizedBox(

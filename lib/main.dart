@@ -45,28 +45,18 @@ class _MainPageState extends State<MainPage> {
     Icons.group,
   ];
 
-  Widget _btnTab(BuildContext context, IconData icon, String text) => Container(
-        width: 250,
-        padding: const EdgeInsets.all(8.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Icon(icon),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(text),
-          )
-        ]),
-      );
-
   @override
   Widget build(BuildContext context) {
     final btns = pages
-        .mapIndexed((index, element) => _btnTab(context, icons[index],
-            ReCase(element.runtimeType.toString()).titleCase))
+        .mapIndexed((index, element) => VerticalTabItem(
+            icon: Icon(icons[index]),
+            label: Text(ReCase(element.runtimeType.toString()).titleCase)))
         .toList();
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return ResponsiveDrawerScaffold(
+          backgroundColor: Colors.grey.shade100,
           isCompactMode: constraints.maxWidth < 768,
           appBar: AppBar(elevation: 2),
           drawer: VerticalTabMenu(
@@ -74,13 +64,14 @@ class _MainPageState extends State<MainPage> {
             controller: pc,
             children: btns,
             skinActive: (element) => DefaultTextStyle(
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border(
                       bottom: BorderSide(
                           width: 2, color: Theme.of(context).primaryColor)),
-                  color: Theme.of(context).primaryColorLight,
                 ),
                 child: element,
               ),
@@ -88,9 +79,21 @@ class _MainPageState extends State<MainPage> {
           ),
           body: Expanded(
             child: PageView(
+              scrollDirection: Axis.vertical,
               controller: pc,
               onPageChanged: (index) => setState(() => currentIndex = index),
-              children: pages,
+              children: pages
+                  .map((e) => Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16.0),
+                              bottomLeft: Radius.circular(16.0)),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: e,
+                      ))
+                  .toList(),
             ),
           ),
         );
