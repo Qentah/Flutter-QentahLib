@@ -41,36 +41,165 @@ class _FirstPageState extends State<FirstPage> with TickerProviderStateMixin {
         ),
         body: TabBarView(
           controller: tabController,
-          children: [
-            SingleChildScrollView(
-              child: ResponsiveStretchRow(
-                children: [
-                  RSRElement(min_width: 100, child: newMethod(50)),
-                  RSRElement(min_width: 200, child: newMethod(200)),
-                  RSRElement(min_width: 300, child: newMethod(400)),
-                  RSRElement(min_width: 200, child: newMethod(100)),
-                  RSRElement(min_width: 200, child: newMethod(100)),
-                  RSRElement(min_width: 500, child: newMethod(100)),
-                  RSRElement(min_width: 500, child: newMethod(100)),
-                  RSRElement(min_width: 500, child: newMethod(300)),
-                  RSRElement(min_width: 500, child: newMethod(500)),
-                  RSRElement(min_width: 500, child: newMethod(400)),
-                ],
-              ),
-            ),
-            Icon(Icons.directions_transit),
+          children: const [
+            RegisterM(),
+            MachinesM(),
             Icon(Icons.directions_bike),
           ],
         ),
       ),
     );
   }
+}
 
-  Container newMethod(double height) => Container(
-        color:
-            Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
-        height: height,
-      );
+class MachinesM extends StatelessWidget {
+  const MachinesM({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ResponsiveStretchRow(
+        children: [
+          RSRElement(
+            min_width: double.infinity,
+            child: Container(
+              color: Colors.blue,
+              padding: const EdgeInsets.all(16.0),
+              width: 1000,
+              height: 100,
+              child: Row(
+                children: [
+                  Container(
+                    color: Colors.red,
+                    height: 100,
+                    width: 100,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: "Machine Type"),
+                  ),
+                  Container(
+                    color: Colors.blue,
+                    height: 100,
+                    width: 100,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          RSRElement(
+            min_width: 300,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(8.0)),
+              height: 700,
+            ),
+          ),
+          RSRElement(min_width: 4.0, child: Container()),
+          RSRElement(
+            min_width: 300,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey, borderRadius: BorderRadius.circular(8.0)),
+              height: 700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RegisterM extends StatelessWidget {
+  const RegisterM({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ResponsiveStretchRow(
+        children: [
+          RSRElement(
+              min_width: 300,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 400),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "Machine Type"),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "RPI ID"),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "Cruible ID"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextButton(
+                            onPressed: () {}, child: Text("Register")),
+                      )
+                    ],
+                  ),
+                ),
+              )),
+          RSRElement(
+              min_width: 300,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.grey,
+                      ),
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text("Machine Info"),
+                  ),
+                  const Text("All specification of the machine should be here"),
+                ],
+              )),
+          RSRElement(
+              min_width: 300,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text("Generated QR Code"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.grey,
+                      ),
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text("Download"),
+                  ),
+                ],
+              ))
+        ],
+      ),
+    );
+  }
 }
 
 class RSRElement extends StatelessWidget {
@@ -90,44 +219,6 @@ class ResponsiveStretchRow extends StatelessWidget {
   ResponsiveStretchRow({Key? key, required this.children}) : super(key: key);
 
   final List<RSRElement> children;
-  final List<double> min_sizes = [
-    300,
-    100,
-    200,
-    300,
-    500,
-    300,
-    100,
-    100,
-    300,
-    300,
-    100,
-    200,
-    300,
-    500,
-    300,
-    100,
-    100,
-    300,
-    300,
-    100,
-    200,
-    300,
-    500,
-    300,
-    100,
-    100,
-    300,
-    300,
-    100,
-    200,
-    300,
-    500,
-    300,
-    100,
-    100,
-    300
-  ];
 
   @override
   Widget build(BuildContext context) =>
@@ -137,27 +228,37 @@ class ResponsiveStretchRow extends StatelessWidget {
         var size = .0;
         List<Widget> row = [];
         for (var i = 0; i < children.length; i++) {
+          if (children[i].min_width == double.infinity) {
+            rows.add([Expanded(child: children[i])]);
+            i++;
+          }
           if (children[i].min_width + size > constraints.maxWidth) {
             rows.add(List.from(row));
             row.clear();
             size = 0;
           }
-          size += min_sizes[i];
+          size += children[i].min_width;
           row.add(Expanded(
               flex: children[i].min_width.toInt(), child: children[i]));
         }
         rows.add(List.from(row));
 
-        return Column(
-          children: [
-            for (var row in rows)
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: row,
-                ),
-              )
-          ],
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              for (var row in rows)
+                Column(
+                  children: [
+                    IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: row,
+                      ),
+                    ),
+                  ],
+                )
+            ],
+          ),
         );
       });
 }

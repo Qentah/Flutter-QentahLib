@@ -56,6 +56,7 @@ class _MainPageState extends State<MainPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return ResponsiveDrawerScaffold(
+          drawerEdgeDragWidth: 125,
           backgroundColor: Colors.grey.shade100,
           isCompactMode: constraints.maxWidth < 768,
           appBar: AppBar(elevation: 2),

@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Flutter Build",
+            "type": "shell",
+            "command": "flutter",
+            "args": [
+				"build",
+				"web",
+				"--web-renderer",
+				"html",
+			],
+        },
+        {
+            "label": "Firebase Deploy",
+            "type": "shell",
+            "command": "firebase",
+            "args": [ "deploy" ],
+        },
+		{
+			"label": "Build & Deploy",
+            "type": "shell",
+            "command": "firebase",
+            "args": [ "deploy" ],
+			"dependsOn": ["Flutter Build"],
+			"group": {
+                "kind": "build",
+                "isDefault": true
+            },
+		}
+    ]
+}
+
