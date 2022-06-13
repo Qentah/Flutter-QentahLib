@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:qentah_app/responsive_scaffold.dart';
+import 'package:qentah_app/widgets/responsive_scaffold.dart';
 import 'package:qentah_app/routes/router.dart';
-import 'package:qentah_app/vertical_tab.dart';
+import 'package:qentah_app/widgets/vertical_tab.dart';
 import 'package:recase/recase.dart';
 import 'package:flutter/material.dart';
 import 'package:qentah_app/pages/first_page.dart';
