@@ -67,7 +67,7 @@ class ResponsiveDrawerScaffold extends StatelessWidget {
         key: key,
         drawer: isCompactMode
             ? Container(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
                 width: drawerWidth,
                 child: drawer,
               )
