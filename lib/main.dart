@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:qentah_app/responsive_scaffold.dart';
+import 'package:qentah_app/routes/router.dart';
 import 'package:qentah_app/vertical_tab.dart';
 import 'package:recase/recase.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +16,24 @@ class QentahApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const MaterialApp(
         title: "QentahApp",
-        home: MainPage(),
+        initialRoute: MainPage.url,
+        onGenerateRoute: generateRoute,
       );
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  static const url = "/main";
+
+  MainPage({Key? key, this.settings}) : super(key: key);
+  final RouteSettings? settings;
+
+  var index = 0;
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  final PageController pc = PageController();
-  int currentIndex = 0;
-
   final pages = [
     const FirstPage(),
     Container(color: Colors.red),
@@ -46,7 +51,21 @@ class _MainPageState extends State<MainPage> {
   ];
 
   @override
+  initState() {
+    super.initState();
+    try {
+      final data = widget.settings!.name;
+      var index = int.parse(Uri.parse(data!).queryParameters['page'] ?? "0");
+      widget.index = index;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final PageController pc = PageController(initialPage: widget.index);
+
     final btns = pages
         .mapIndexed((index, element) => VerticalTabItem(
             icon: Icon(icons[index]),
@@ -56,12 +75,12 @@ class _MainPageState extends State<MainPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return ResponsiveDrawerScaffold(
-          drawerEdgeDragWidth: 125,
+          drawerEdgeDragWidth: 100,
           backgroundColor: Colors.grey.shade100,
           isCompactMode: constraints.maxWidth < 768,
           appBar: AppBar(elevation: 2),
           drawer: VerticalTabMenu(
-            currentIndex: currentIndex,
+            currentIndex: widget.index,
             controller: pc,
             children: btns,
             skinActive: (element) => DefaultTextStyle(
@@ -82,7 +101,7 @@ class _MainPageState extends State<MainPage> {
             child: PageView(
               scrollDirection: Axis.vertical,
               controller: pc,
-              onPageChanged: (index) => setState(() => currentIndex = index),
+              onPageChanged: (index) => setState(() => widget.index = index),
               children: pages
                   .map((e) => Container(
                         decoration: const BoxDecoration(
