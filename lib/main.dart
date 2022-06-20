@@ -6,24 +6,35 @@ import 'package:recase/recase.dart';
 import 'package:flutter/material.dart';
 import 'package:qentah_app/pages/first_page.dart';
 
-void main() {
-  runApp(const QentahApp());
+import 'package:json_theme/json_theme.dart';
+
+import 'package:flutter/services.dart'; // For rootBundle
+import 'dart:convert'; // For jsonDecode
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final themeStr = await rootBundle.loadString('assets/theme.json');
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+
+  runApp(QentahApp(theme: theme));
 }
 
 class QentahApp extends StatelessWidget {
-  const QentahApp({Key? key}) : super(key: key);
+  final ThemeData theme;
+  const QentahApp({Key? key, required this.theme}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
         title: "QentahApp",
-        initialRoute: MainPage.url,
+        initialRoute: "/",
         onGenerateRoute: generateRoute,
+        theme: theme,
       );
 }
 
 class MainPage extends StatefulWidget {
-  static const url = "/main";
-
   MainPage({Key? key, this.settings}) : super(key: key);
   final RouteSettings? settings;
 
@@ -103,7 +114,7 @@ class _MainPageState extends State<MainPage> {
               controller: pc,
               onPageChanged: (index) => setState(() => widget.index = index),
               children: pages
-                  .map((e) => Container(
+                  .map((page) => Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
@@ -111,7 +122,7 @@ class _MainPageState extends State<MainPage> {
                               bottomLeft: Radius.circular(16.0)),
                         ),
                         clipBehavior: Clip.antiAlias,
-                        child: e,
+                        child: page,
                       ))
                   .toList(),
             ),
