@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:qentah_app/widgets/smart_wraper.dart';
 
 class FirstPage extends StatefulWidget {
-  static const url = "/firstPage";
-
   const FirstPage({
     Key? key,
     this.settings,
@@ -72,7 +70,8 @@ class MachinesM extends StatelessWidget {
                   content: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "Machine Type"),
+                      decoration:
+                          const InputDecoration(labelText: "Machine Type"),
                     ),
                   ),
                 ),
@@ -81,20 +80,20 @@ class MachinesM extends StatelessWidget {
                   content: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration: InputDecoration(labelText: "RPI ID"),
+                      decoration: const InputDecoration(labelText: "RPI ID"),
                     ),
                   ),
                 ),
                 SmartItem(
                   minWidth: 300,
-                  content: Container(
+                  content: SizedBox(
                     width: 250,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton(
                           onPressed: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
                             child: Text("Search"),
                           )),
                     ),
@@ -131,9 +130,9 @@ class MachinesM extends StatelessWidget {
                             width: 200,
                             height: 200,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Text("Machine Info"),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("Machine Info"),
                           ),
                           const Text(
                               "All specification of the machine should be here"),
@@ -164,25 +163,27 @@ class RegisterM extends StatelessWidget {
             SmartItem(
               minWidth: 300,
               content: Container(
-                constraints: BoxConstraints(maxWidth: 400),
+                constraints: const BoxConstraints(maxWidth: 400),
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(labelText: "Machine Type"),
+                      decoration:
+                          const InputDecoration(labelText: "Machine Type"),
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: "RPI ID"),
+                      decoration: const InputDecoration(labelText: "RPI ID"),
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: "Cruible ID"),
+                      decoration:
+                          const InputDecoration(labelText: "Cruible ID"),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: TextButton(
                           onPressed: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
                             child: Text("Register"),
                           )),
                     )
@@ -202,9 +203,9 @@ class RegisterM extends StatelessWidget {
                       width: 200,
                       height: 200,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Text("Machine Info"),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Machine Info"),
                     ),
                     const Text(
                         "All specification of the machine should be here"),
@@ -214,9 +215,9 @@ class RegisterM extends StatelessWidget {
                 minWidth: 300,
                 content: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Text("Generated QR Code"),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Generated QR Code"),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -231,8 +232,8 @@ class RegisterM extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Text("Download"),
                       ),
                     ),
