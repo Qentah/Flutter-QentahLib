@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qentah_app/widgets/smart_wraper.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({
@@ -90,7 +95,7 @@ class MachinesM extends StatelessWidget {
                     width: 250,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
+                      child: ElevatedButton(
                           onPressed: () {},
                           child: const Padding(
                             padding: EdgeInsets.all(16.0),
@@ -180,11 +185,34 @@ class RegisterM extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: TextButton(
-                          onPressed: () {},
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+
+                            if (result != null && result.count > 0) {
+                              Supabase.instance.client.storage
+                                  .from("images")
+                                  .uploadBinary(
+                                      "me/${DateTime.now().hashCode}.${result.files[0].extension ?? ""}"
+                                          .toLowerCase(),
+                                      result.files[0].bytes!)
+                                  .then((value) {
+                                print(value.error);
+                                return showDialog(
+                                    context: context,
+                                    builder: (_) => value.hasError
+                                        ? Center(child: const Text("Error"))
+                                        : Image.network(
+                                            "${Supabase.instance.client.storageUrl}/object/public/${value.data!}"));
+                              });
+                            } else {
+                              // User canceled the picker
+                            }
+                          },
                           child: const Padding(
                             padding: EdgeInsets.all(16.0),
-                            child: Text("Register"),
+                            child: Text("Pick File"),
                           )),
                     )
                   ],
@@ -230,8 +258,21 @@ class RegisterM extends StatelessWidget {
                         height: 200,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {},
+                    ElevatedButton(
+                      onPressed: () {
+                        Supabase.instance.client.auth
+                            .signIn(email: "henryq.pro@outlook.fr")
+                            .then(
+                          (value) {
+                            print(value.url);
+                            Supabase.instance.client
+                                .from('profiles')
+                                .select('*')
+                                .execute()
+                                .then((value) => print(value.data));
+                          },
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Text("Download"),

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:qentah_app/models/machine_types.dart';
 import 'package:qentah_app/widgets/responsive_scaffold.dart';
 import 'package:qentah_app/routes/router.dart';
 import 'package:qentah_app/widgets/vertical_tab.dart';
@@ -11,12 +12,21 @@ import 'package:json_theme/json_theme.dart';
 import 'package:flutter/services.dart'; // For rootBundle
 import 'dart:convert'; // For jsonDecode
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final themeStr = await rootBundle.loadString('assets/theme.json');
   final themeJson = jsonDecode(themeStr);
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+
+  await Supabase.initialize(
+      url: "https://yslffwoqtmclpezxqfhz.supabase.co",
+      anonKey:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbGZmd29xdG1jbHBlenhxZmh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU3OTk2OTEsImV4cCI6MTk3MTM3NTY5MX0.qciAnIqJG-XCJhOvWTnQcOSwjWV7Qkf2Qn-igJg9JdI",
+      debug: true // optional
+      );
 
   runApp(QentahApp(theme: theme));
 }
