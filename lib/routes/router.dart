@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qentah_app/main.dart';
 import 'package:qentah_app/models/user.dart';
-import 'package:qentah_app/pages/first_page.dart';
 import 'package:qentah_app/test/user.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -10,7 +9,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   final Map<String, Widget> routes = {
     '/': MainPage(settings: settings),
     '/main': MainPage(settings: settings),
-    '/first': FirstPage(settings: settings),
   };
 
   return MaterialPageRoute(
@@ -28,8 +26,7 @@ bool haveUrlAccess(String url) {
 
   final Map<String, List<int>> permissions = {
     '/': [0],
-    '/main': [1, 2],
-    '/first': [1],
+    '/main': [0],
   };
 
   final setRolesPerms = user.roles

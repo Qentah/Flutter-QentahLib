@@ -1,11 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:qentah_app/models/machine_types.dart';
+import 'package:qentah_app/pages/login.dart';
 import 'package:qentah_app/widgets/responsive_scaffold.dart';
 import 'package:qentah_app/routes/router.dart';
 import 'package:qentah_app/widgets/vertical_tab.dart';
 import 'package:recase/recase.dart';
 import 'package:flutter/material.dart';
-import 'package:qentah_app/pages/first_page.dart';
 
 import 'package:json_theme/json_theme.dart';
 
@@ -56,7 +55,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final pages = [
-    const FirstPage(),
+    const LoginPage(),
     Container(color: Colors.red),
     Container(color: Colors.orange),
     Container(color: Colors.yellow),
