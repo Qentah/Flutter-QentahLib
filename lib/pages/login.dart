@@ -36,16 +36,77 @@ class LoginPage extends StatelessWidget {
                       },
                       child: const Text("Sign Up"),
                     ),
-                    OutlinedButton(
+                    ElevatedButton(
                       onPressed: () async {
-                        await Supabase.instance.client.auth
-                            .signIn(
-                              email: emailControler.text,
-                              password: passwordControler.text,
-                            )
-                            .then((value) => print(value.data?.user?.email));
+                        await Supabase.instance.client.auth.signIn(
+                          email: emailControler.text,
+                          password: passwordControler.text,
+                        );
+
+                        final user = await Supabase.instance.client
+                            .from('user')
+                            .select('*')
+                            .eq('id',
+                                Supabase.instance.client.auth.currentUser!.id)
+                            .maybeSingle()
+                            .execute();
+                        print(user.data);
                       },
                       child: const Text("Sign In"),
+                    ),
+                    OutlinedButton(
+                      onPressed: () async {
+                        await Supabase.instance.client.auth.signIn(
+                          email: 'henryq.dev@outlook.fr',
+                          password: '123456',
+                        );
+
+                        final user = await Supabase.instance.client
+                            .from('user')
+                            .select('*')
+                            .eq('id',
+                                Supabase.instance.client.auth.currentUser!.id)
+                            .maybeSingle()
+                            .execute();
+                        print(user.data);
+                      },
+                      child: const Text("DEV"),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text("GraphQL Query"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final perms = await Supabase.instance.client
+                            .from('permission_user')
+                            .select('permission')
+                            .execute();
+
+                        print(perms.data);
+
+                        final roles = (await Supabase.instance.client
+                                .from('role_user')
+                                .select('role')
+                                .execute())
+                            .data as List;
+
+                        print(roles);
+
+                        final roleperms = await Supabase.instance.client
+                            .from('permission_role')
+                            .select('permission')
+                            .in_('role', roles.map((e) => e['role']).toList())
+                            .execute();
+
+                        print(roleperms.data);
+                      },
+                      child: const Text("SQL Query"),
                     ),
                   ],
                 )
