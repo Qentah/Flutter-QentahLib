@@ -21,11 +21,12 @@ Future<void> main() async {
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
 
   await Supabase.initialize(
-      url: "https://yslffwoqtmclpezxqfhz.supabase.co",
-      anonKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbGZmd29xdG1jbHBlenhxZmh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU3OTk2OTEsImV4cCI6MTk3MTM3NTY5MX0.qciAnIqJG-XCJhOvWTnQcOSwjWV7Qkf2Qn-igJg9JdI",
-      debug: true // optional
-      );
+    debug: false,
+    url: "https://ilkdtzewgvlrkmsauvua.supabase.co",
+    anonKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsa2R0emV3Z3Zscmttc2F1dnVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTUyOTMwODMsImV4cCI6MTk3MDg2OTA4M30.WdnlTbHugUUQ9NHAGFemRlVrrxRkhjXdvGpDfXVQtlE",
+  );
+  Supabase.instance.client.auth.signOut();
 
   runApp(QentahApp(theme: theme));
 }
