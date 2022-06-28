@@ -7,21 +7,18 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      username: json['username'] as String,
-      email: json['email'] as String,
-      age: json['age'] as int,
-      roles: (json['roles'] as List<dynamic>)
-          .map((e) => Role.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      permissions: (json['permissions'] as List<dynamic>)
-          .map((e) => Permission.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      id: json['id'] as String,
+      data: json['data'] as String?,
+      group: json['group'] as int?,
+      permissions: (json['permissions'] as List<dynamic>?)
+              ?.map((e) => Permission.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'username': instance.username,
-      'email': instance.email,
-      'age': instance.age,
-      'roles': instance.roles.map((e) => e.toJson()).toList(),
+      'id': instance.id,
+      'data': instance.data,
+      'group': instance.group,
       'permissions': instance.permissions.map((e) => e.toJson()).toList(),
     };

@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:qentah_app/models/permission.dart';
+import 'package:qentah_app/models/user.dart' as model;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatelessWidget {
@@ -83,12 +85,16 @@ class LoginPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final perms = await Supabase.instance.client
-                            .from('permission_user')
-                            .select('permission')
-                            .execute();
-
-                        print(perms.data);
+                        final user = (await Supabase.instance.client
+                                .from('user')
+                                .select('*')
+                                .eq(
+                                    'id',
+                                    Supabase
+                                        .instance.client.auth.currentUser!.id)
+                                .maybeSingle()
+                                .execute())
+                            .data;
 
                         final roles = (await Supabase.instance.client
                                 .from('role_user')
@@ -96,15 +102,33 @@ class LoginPage extends StatelessWidget {
                                 .execute())
                             .data as List;
 
-                        print(roles);
+                        final perms = (await Supabase.instance.client
+                                .from('permission_user')
+                                .select('permission(*)')
+                                .execute())
+                            .data as List;
 
-                        final roleperms = await Supabase.instance.client
-                            .from('permission_role')
-                            .select('permission')
-                            .in_('role', roles.map((e) => e['role']).toList())
-                            .execute();
+                        final permsSet =
+                            perms.map((e) => e['permission']).toSet();
 
-                        print(roleperms.data);
+                        final roleperms = (await Supabase.instance.client
+                                .from('permission_role')
+                                .select('permission(*)')
+                                .in_('role',
+                                    roles.map((e) => e['role']).toList())
+                                .execute())
+                            .data as List;
+
+                        final rolepermsSet =
+                            roleperms.map((e) => e['permission']).toSet();
+
+                        final permsList = permsSet.union(rolepermsSet).toList();
+                        final u = model.User.fromJson(user);
+                        u.permissions.addAll(
+                            permsList.map((e) => Permission.fromJson(e)));
+
+                        model.GlobalUser.instance = u;
+                        print(u.toJson());
                       },
                       child: const Text("SQL Query"),
                     ),

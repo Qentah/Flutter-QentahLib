@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:qentah_app/main.dart';
 import 'package:qentah_app/models/user.dart';
-import 'package:qentah_app/test/user.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   final url = Uri.parse(settings.name!).path;
+  final user = GlobalUser.instance;
 
   final Map<String, Widget> routes = {
     '/': MainPage(settings: settings),
-    '/main': MainPage(settings: settings),
+    '/page': Scaffold(
+      body: Center(
+        child: Text(
+            "Private access : Welcome Sir ${user.data} from GROUP ${user.group} "),
+      ),
+    ),
   };
 
   return MaterialPageRoute(
@@ -22,21 +27,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 }
 
 bool haveUrlAccess(String url) {
-  final user = User.fromJson(jUser); //TODO fetch from db
+  final user = GlobalUser.instance;
 
-  final Map<String, List<int>> permissions = {
-    '/': [0],
-    '/main': [0],
+  final Map<String, List<String>> permissions = {
+    '/': ["0"],
+    '/page': ["IPRXX"],
   };
 
-  final setRolesPerms = user.roles
-      .map((e) => e.permissions.map((e) => e.id))
-      .expand((i) => i)
-      .toSet();
   final setUserPerms = user.permissions.map((e) => e.id).toSet();
   final setUrlPerms = permissions[url]?.toSet() ?? {};
 
-  return setUserPerms.union(setRolesPerms).intersection(setUrlPerms).isNotEmpty;
+  return setUserPerms.intersection(setUrlPerms).isNotEmpty;
 }
 
 class Error404 extends StatelessWidget {

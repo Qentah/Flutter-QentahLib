@@ -7,12 +7,14 @@ part of 'permission.dart';
 // **************************************************************************
 
 Permission _$PermissionFromJson(Map<String, dynamic> json) => Permission(
-      json['id'] as int,
-      json['label'] as String,
+      json['id'] as String,
+      name: json['name'] as String?,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$PermissionToJson(Permission instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'label': instance.label,
+      'name': instance.name,
+      'description': instance.description,
     };
